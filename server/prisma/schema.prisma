@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum TokenStatus {
+  WAITING
+  SERVING
+  SERVED
+  CANCELLED
+}
+
+model Manager {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  name         String?
+  createdAt    DateTime @default(now())
+
+  queues Queue[]
+}
+
+model Queue {
+  id           String   @id @default(uuid())
+  name         String
+  managerId    String
+  tokenCounter Int      @default(0)
+  createdAt    DateTime @default(now())
+
+  manager   Manager         @relation(fields: [managerId], references: [id], onDelete: Cascade)
+  tokens    Token[]
+  snapshots QueueSnapshot[]
+
+  @@unique([managerId, name])
+  @@index([managerId])
+}
+
+model Token {
+  id          String      @id @default(uuid())
+  queueId     String
+  tokenNumber Int
+  personName  String
+  status      TokenStatus @default(WAITING)
+  position    Int
+
+  createdAt   DateTime  @default(now())
+  servedAt    DateTime?
+  completedAt DateTime?
+  cancelledAt DateTime?
+
+  queue Queue @relation(fields: [queueId], references: [id], onDelete: Cascade)
+
+  @@unique([queueId, tokenNumber])
+  @@index([queueId, status, position])
+  @@index([queueId, createdAt])
+}
+
+model QueueSnapshot {
+  id         String   @id @default(uuid())
+  queueId    String
+  length     Int
+  recordedAt DateTime @default(now())
+
+  queue Queue @relation(fields: [queueId], references: [id], onDelete: Cascade)
+
+  @@index([queueId, recordedAt])
+}
