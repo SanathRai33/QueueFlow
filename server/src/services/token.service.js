@@ -17,6 +17,13 @@ const getWaitingList = (tx, queueId) => {
   });
 };
 
+const saveSnapshot = async (tx, queueId) => {
+  const length = await tx.token.count({
+    where: { queueId, status: "WAITING" },
+  });
+  await tx.queueSnapshot.create({ data: { queueId, length } });
+};
+
 const addTokenToQueue = (queueId, personName) => {
   return prisma.$transaction(async (tx) => {
     const queue = await tx.queue.update({
@@ -29,7 +36,7 @@ const addTokenToQueue = (queueId, personName) => {
       _max: { position: true },
     });
 
-    return tx.token.create({
+    const token = await tx.token.create({
       data: {
         queueId,
         personName,
@@ -37,6 +44,10 @@ const addTokenToQueue = (queueId, personName) => {
         position: (last._max.position || 0) + 1,
       },
     });
+
+    await saveSnapshot(tx, queueId);
+
+    return token;
   });
 };
 
@@ -102,10 +113,14 @@ const serveNextToken = (queueId) => {
       data: { status: "SERVED", completedAt: now },
     });
 
-    return tx.token.update({
+    const serving = await tx.token.update({
       where: { id: top.id },
       data: { status: "SERVING", servedAt: now },
     });
+
+    await saveSnapshot(tx, queueId);
+
+    return serving;
   });
 };
 
@@ -141,6 +156,8 @@ const cancelTokenInQueue = (tokenId, queueId) => {
       where: { id: token.id },
       data: { status: "CANCELLED", cancelledAt: new Date() },
     });
+
+    await saveSnapshot(tx, queueId);
 
     return getWaitingList(tx, queueId);
   });
