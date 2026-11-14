@@ -46,8 +46,10 @@ const RegisterPage = () => {
                 )}
 
                 <div>
-                    <label className="block text-sm font-medium mb-1">Name</label>
+                    <label htmlFor='name' className="block text-sm font-medium mb-1">Name</label>
                     <input
+                        id='name'
+                        autoComplete='name'
                         type="text"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
@@ -57,8 +59,10 @@ const RegisterPage = () => {
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium mb-1">Email</label>
+                    <label htmlFor='email' className="block text-sm font-medium mb-1">Email</label>
                     <input
+                        id='email'
+                        autoComplete='email'
                         type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
@@ -68,8 +72,10 @@ const RegisterPage = () => {
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium mb-1">Password</label>
+                    <label htmlFor='password' className="block text-sm font-medium mb-1">Password</label>
                     <input
+                        id='password'
+                        autoComplete='new-password'
                         type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}

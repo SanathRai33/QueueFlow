@@ -112,6 +112,7 @@ const DashboardPage = () => {
 
         <div className="flex flex-wrap items-center gap-3">
           <select
+            aria-label="Select queue"
             value={queueId}
             onChange={(e) => setQueueId(e.target.value)}
             className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-indigo-100"
@@ -128,9 +129,8 @@ const DashboardPage = () => {
               <button
                 key={range.days}
                 onClick={() => setDays(range.days)}
-                className={`px-3 py-1.5 rounded-md text-sm font-medium ${
-                  days === range.days ? 'bg-brand text-white' : 'text-slate-600 hover:bg-slate-50'
-                }`}
+                className={`px-3 py-1.5 rounded-md text-sm font-medium ${days === range.days ? 'bg-brand text-white' : 'text-slate-600 hover:bg-slate-50'
+                  }`}
               >
                 {range.label}
               </button>
