@@ -19,12 +19,14 @@ const findOwnedToken = (tokenId, managerId) => {
 
 const addToken = async (req, res, next) => {
   try {
+
     const queue = await findOwnedQueue(req.params.id, req.managerId);
+
     if (!queue) {
       return res.status(404).json({ message: "Queue not found" });
     }
 
-    const personName = req.body.personName ? req.body.personName.trim() : "";
+    const personName = cleanText(req.body.personName);
 
     if (!personName) {
       return res.status(400).json({ message: "Person name is required" });

@@ -1,8 +1,9 @@
 const prisma = require("../config/db");
+const { cleanText } = require("../utils/text");
 
 const createQueue = async (req, res, next) => {
   try {
-    const name = req.body.name ? req.body.name.trim() : "";
+    const name = cleanText(req.body.name);;
 
     if (!name) {
       return res.status(400).json({ message: "Queue name is required" });
