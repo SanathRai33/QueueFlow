@@ -6,6 +6,9 @@ const AddTokenForm = ({ onAdd }) => {
     const [submitting, setSubmitting] = useState(false);
 
     const handleSubmit = async (e) => {
+
+        if (submitting) return;
+        
         e.preventDefault();
         setError('');
 
@@ -29,6 +32,7 @@ const AddTokenForm = ({ onAdd }) => {
         <form onSubmit={handleSubmit} className="mb-4">
             <div className="flex gap-3">
                 <input
+                    aria-label="Person name"
                     type="text"
                     value={name}
                     maxLength={60}

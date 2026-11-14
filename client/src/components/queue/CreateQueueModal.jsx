@@ -51,8 +51,10 @@ const CreateQueueModal = ({ onClose, onCreated }) => {
                     )}
 
                     <div>
-                        <label className="block text-sm font-medium mb-1">Queue name</label>
+                        <label htmlFor='queue-name' className="block text-sm font-medium mb-1">Queue name</label>
                         <input
+                            id='queue-name'
+                            autoComplete='off'
                             autoFocus
                             type="text"
                             value={name}
