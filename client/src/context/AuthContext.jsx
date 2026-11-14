@@ -18,7 +18,9 @@ export const AuthProvider = ({ children }) => {
         api
             .get('/auth/me')
             .then((res) => setManager(res.data.manager))
-            .catch(() => localStorage.removeItem('token'))
+            .catch((err) => {
+                if (err.response) localStorage.removeItem('token');
+            })
             .finally(() => setLoading(false));
     }, []);
 
