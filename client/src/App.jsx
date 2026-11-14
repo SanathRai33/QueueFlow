@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
+import AppLayout from './components/layout/AppLayout';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import QueuesPage from './pages/QueuesPage';
@@ -17,9 +18,11 @@ const App = () => {
       </Route>
 
       <Route element={<ProtectedRoute />}>
-        <Route path="/" element={<QueuesPage />} />
-        <Route path="/queues/:id" element={<QueueDetailPage />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route element={<AppLayout />}>
+          <Route path="/" element={<QueuesPage />} />
+          <Route path="/queues/:id" element={<QueueDetailPage />} />
+          <Route path="/dashboard" element={<DashboardPage />} />
+        </Route>
       </Route>
 
       <Route path="*" element={<NotFoundPage />} />
