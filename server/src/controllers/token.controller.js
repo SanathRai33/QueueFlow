@@ -6,6 +6,7 @@ const {
   completeCurrentToken,
   cancelTokenInQueue,
 } = require("../services/token.service");
+const { cleanText } = require('../utils/text')
 
 const findOwnedQueue = (queueId, managerId) => {
   return prisma.queue.findFirst({ where: { id: queueId, managerId } });
@@ -19,7 +20,6 @@ const findOwnedToken = (tokenId, managerId) => {
 
 const addToken = async (req, res, next) => {
   try {
-
     const queue = await findOwnedQueue(req.params.id, req.managerId);
 
     if (!queue) {
