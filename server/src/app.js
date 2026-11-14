@@ -8,6 +8,7 @@ const tokenRoutes = require("./routes/token.routes");
 const analyticsRoutes = require("./routes/analytics.routes");
 
 const app = express();
+app.set('trust proxy', 1);
 
 app.use(helmet());
 app.use(cors({ origin: process.env.CLIENT_URL }));
